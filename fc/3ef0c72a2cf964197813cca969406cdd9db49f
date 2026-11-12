@@ -1,0 +1,21 @@
+.github/workflows/deploy.yml
+  s_f6ca9e209b566f::t_a8f58376b35f68 1-54
+.github/workflows/ci.yml
+  s_f6ca9e209b566f::t_7d85708c6325be 1-46
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "fc3ef0c72a2cf964197813cca969406cdd9db49f",
+  "prompts": {},
+  "sessions": {
+    "s_f6ca9e209b566f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b8474267-82d1-431c-a7de-8b207ebf9fbe",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "vaishali.patil <vaishali.patil@coupa.com>"
+    }
+  }
+}

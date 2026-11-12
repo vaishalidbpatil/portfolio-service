@@ -21,11 +21,11 @@ if ($volumeExists) {
     docker volume rm $volumeName | Out-Null
 }
 
-# Step 2 - Start Postgres first and wait for it to be healthy
-Write-Host "`nStarting Postgres..." -ForegroundColor Yellow
-docker compose up -d postgres
+# Step 2 - Start Postgres and RabbitMQ, wait for both to be healthy
+Write-Host "`nStarting Postgres and RabbitMQ..." -ForegroundColor Yellow
+docker compose up -d postgres rabbitmq
 if ($LASTEXITCODE -ne 0) {
-    Write-Host "Failed to start Postgres." -ForegroundColor Red
+    Write-Host "Failed to start infrastructure services." -ForegroundColor Red
     exit 1
 }
 
@@ -44,12 +44,27 @@ if ($LASTEXITCODE -ne 0) {
 }
 Write-Host "Postgres is ready." -ForegroundColor Green
 
-# Step 3 - Build and start the API (MigrationRunner runs on startup)
-Write-Host "`nBuilding and starting API..." -ForegroundColor Yellow
-docker compose up -d --build api
+Write-Host "Waiting for RabbitMQ to be ready..."
+$retries = 30
+do {
+    Start-Sleep -Seconds 2
+    docker exec portfolio-rabbitmq rabbitmq-diagnostics ping 2>&1 | Out-Null
+    $retries--
+} while ($LASTEXITCODE -ne 0 -and $retries -gt 0)
+
 if ($LASTEXITCODE -ne 0) {
-    Write-Host "Failed to start API." -ForegroundColor Red
-    docker compose logs api
+    Write-Host "RabbitMQ did not become ready in time." -ForegroundColor Red
+    docker compose logs rabbitmq
+    exit 1
+}
+Write-Host "RabbitMQ is ready." -ForegroundColor Green
+
+# Step 3 - Build and start all application services
+Write-Host "`nBuilding and starting Auth, API, and Sync..." -ForegroundColor Yellow
+docker compose up -d --build auth api sync
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "Failed to start application services." -ForegroundColor Red
+    docker compose logs auth api sync
     exit 1
 }
 
@@ -59,5 +74,7 @@ Start-Sleep -Seconds 10
 docker compose logs api --tail 30
 
 Write-Host "`nSetup complete." -ForegroundColor Cyan
-Write-Host "  Swagger UI : http://localhost:8080/swagger" -ForegroundColor Green
-Write-Host "  Health     : http://localhost:8080/health/live" -ForegroundColor Green
+Write-Host "  Swagger UI      : http://localhost:8080/swagger" -ForegroundColor Green
+Write-Host "  Health          : http://localhost:8080/health/live" -ForegroundColor Green
+Write-Host "  Auth (OIDC)     : http://localhost:5001" -ForegroundColor Green
+Write-Host "  RabbitMQ Mgmt   : http://localhost:15672  (guest/guest)" -ForegroundColor Green

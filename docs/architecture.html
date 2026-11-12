@@ -85,11 +85,17 @@
     <div class="diagram">
       <div class="diagram-label">Client layer</div>
       <div class="diagram-row">
-        <span class="box box-purple">Dashboard (Browser)</span>
-        <span class="arrow">→</span>
-        <span class="box box-orange">Auth.Service (OAuth2)</span>
-        <span class="arrow">→</span>
-        <span class="box box-blue">Orders API /v1</span>
+        <span class="box box-purple">Client</span>
+        <span class="arrow">→ POST /connect/token →</span>
+        <span class="box box-orange">Auth.Service (Duende OIDC :5001)</span>
+        <span class="arrow">← Bearer token ←</span>
+        <span class="box box-purple">Client</span>
+      </div>
+      <div class="diagram-row" style="margin-top:0.5rem;">
+        <span class="box box-purple">Client</span>
+        <span class="arrow">→ Authorization: Bearer … →</span>
+        <span class="box box-blue">Orders API /v1 :8080</span>
+        <span class="arrow" style="font-size:0.75rem;color:#8b949e;">validates token vs Auth.Service</span>
       </div>
 
       <div class="diagram-divider"></div>

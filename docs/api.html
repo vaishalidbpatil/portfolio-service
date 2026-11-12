@@ -88,6 +88,23 @@
 <div class="container">
 
   <div class="section">
+    <h2>Authentication</h2>
+    <p style="margin-bottom:1rem;">All <code>/v1/orders</code> endpoints require a Bearer token issued by the Auth service. Health endpoints (<code>/health/live</code>, <code>/health/ready</code>) are open.</p>
+    <h3 style="font-size:0.95rem;font-weight:600;color:#c9d1d9;margin-bottom:0.75rem;">Obtain a token</h3>
+    <pre>POST http://localhost:5001/connect/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=client_credentials
+&amp;client_id=orders-api-client
+&amp;client_secret=orders-api-secret
+&amp;scope=orders.read orders.write</pre>
+    <h3 style="font-size:0.95rem;font-weight:600;color:#c9d1d9;margin:1.25rem 0 0.75rem;">Use the token</h3>
+    <pre>GET http://localhost:8080/v1/orders
+Authorization: Bearer &lt;access_token&gt;</pre>
+    <p style="margin-top:1rem;color:#8b949e;font-size:0.875rem;">In Swagger UI, click <strong>Authorize</strong> and paste the token value (without the <code>Bearer</code> prefix).</p>
+  </div>
+
+  <div class="section">
     <h2>Endpoints overview</h2>
     <table class="ep-table">
       <thead><tr><th>Method</th><th>Path</th><th>Description</th></tr></thead>

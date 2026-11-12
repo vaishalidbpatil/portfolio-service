@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.OpenApi;
 using Portfolio.TradeOrderService.Configuration;
 using Portfolio.TradeOrderService.DataAccess;
 using Portfolio.TradeOrderService.Database;
@@ -6,11 +8,43 @@ using Portfolio.TradeOrderService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var authority = builder.Configuration["Auth:Authority"]
+    ?? throw new InvalidOperationException("Auth:Authority configuration is missing.");
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.Authority = authority;
+        options.TokenValidationParameters.ValidateAudience = false;
+        // Allow HTTP in dev; remove for production
+        options.RequireHttpsMetadata = false;
+    });
+
+builder.Services.AddAuthorization();
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new() { Title = "Trade Order Service", Version = "v1" });
+
+    var scheme = new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Paste a Bearer token obtained from POST http://localhost:5001/connect/token"
+    };
+    c.AddSecurityDefinition("Bearer", scheme);
+    c.AddSecurityRequirement(_ => new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecuritySchemeReference("Bearer"),
+            new List<string>()
+        }
+    });
 });
 
 var dbOptions = builder.Configuration
@@ -35,6 +69,8 @@ app.UseSwagger();
 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Trade Order Service v1"));
 
 app.UseHttpsRedirection();
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
 
 app.MapGet("/health/live", () => Results.Ok(new { status = "alive" }));

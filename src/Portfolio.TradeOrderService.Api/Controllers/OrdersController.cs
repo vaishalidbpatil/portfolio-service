@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Portfolio.TradeOrderService.Models;
 using Portfolio.TradeOrderService.Models.Requests;
@@ -7,6 +8,7 @@ namespace Portfolio.TradeOrderService.Api.Controllers;
 
 [ApiController]
 [Route("v1/orders")]
+[Authorize]
 public class OrdersController : ControllerBase
 {
     private readonly IOrderService _orderService;

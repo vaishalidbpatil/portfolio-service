@@ -1,0 +1,19 @@
+src/Portfolio.TradeOrderService.Auth/Dockerfile
+  s_f6ca9e209b566f::t_a5c644a4633c9f 17-21
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0cd1d474cbb0c822f9b32a22261f5f6e29bd9d72",
+  "prompts": {},
+  "sessions": {
+    "s_f6ca9e209b566f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b8474267-82d1-431c-a7de-8b207ebf9fbe",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "vaishali.patil <vaishali.patil@coupa.com>"
+    }
+  }
+}

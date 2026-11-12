@@ -1,0 +1,37 @@
+docs/architecture.html
+  s_f6ca9e209b566f::t_935923020b172b 88-98
+src/Portfolio.TradeOrderService.Api/Controllers/OrdersController.cs
+  s_f6ca9e209b566f::t_f674cce5ca755c 1,11
+src/Portfolio.TradeOrderService.Api/appsettings.json
+  s_f6ca9e209b566f::t_2758fbaecebd47 11-13
+docker-compose.yml
+  s_f6ca9e209b566f::t_b47e7657c9b45f 55
+docs/api.html
+  s_f6ca9e209b566f::t_a3126ed4a6ce7f 91-106
+  s_f6ca9e209b566f::t_03d2a0536f3f37 90
+src/Portfolio.TradeOrderService.Api/Portfolio.TradeOrderService.Api.csproj
+  s_f6ca9e209b566f::t_571be41f1a9c0b 12
+src/Portfolio.TradeOrderService.Api/Program.cs
+  s_f6ca9e209b566f::t_71419ddb6a7c6b 1,11-24,30-40,42-43,46-47
+  s_f6ca9e209b566f::t_d99f841b74c085 44
+  s_f6ca9e209b566f::t_f219eb62739d11 41
+  s_f6ca9e209b566f::t_a56fbd2fc2513f 45
+  s_f6ca9e209b566f::t_9b2cb5d8fdd17d 2
+  s_f6ca9e209b566f::t_d8f7d84e556ad2 72-73
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a826a9dd585590827cafc9e9c1c63ca40341f788",
+  "prompts": {},
+  "sessions": {
+    "s_f6ca9e209b566f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b8474267-82d1-431c-a7de-8b207ebf9fbe",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "vaishali.patil <vaishali.patil@coupa.com>"
+    }
+  }
+}

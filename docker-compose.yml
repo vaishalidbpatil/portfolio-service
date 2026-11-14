@@ -53,9 +53,22 @@ services:
     environment:
       Database__ConnectionString: "Host=postgres;Port=5432;Database=tradeorders;Username=admin;Password=admin123"
       Auth__Authority: "http://auth:5001"
+      Dashboard__Origin: "http://localhost:3000"
     depends_on:
       postgres:
         condition: service_healthy
+
+  dashboard:
+    build:
+      context: src/Portfolio.TradeOrderService.Dashboard
+      dockerfile: Dockerfile
+    container_name: portfolio-dashboard
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      - auth
+      - api
 
   sync:
     build:

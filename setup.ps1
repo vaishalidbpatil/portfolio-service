@@ -60,11 +60,11 @@ if ($LASTEXITCODE -ne 0) {
 Write-Host "RabbitMQ is ready." -ForegroundColor Green
 
 # Step 3 - Build and start all application services
-Write-Host "`nBuilding and starting Auth, API, and Sync..." -ForegroundColor Yellow
-docker compose up -d --build auth api sync
+Write-Host "`nBuilding and starting Auth, API, Sync, and Dashboard..." -ForegroundColor Yellow
+docker compose up -d --build auth api sync dashboard
 if ($LASTEXITCODE -ne 0) {
     Write-Host "Failed to start application services." -ForegroundColor Red
-    docker compose logs auth api sync
+    docker compose logs auth api sync dashboard
     exit 1
 }
 
@@ -77,4 +77,5 @@ Write-Host "`nSetup complete." -ForegroundColor Cyan
 Write-Host "  Swagger UI      : http://localhost:8080/swagger" -ForegroundColor Green
 Write-Host "  Health          : http://localhost:8080/health/live" -ForegroundColor Green
 Write-Host "  Auth (OIDC)     : http://localhost:5001" -ForegroundColor Green
+Write-Host "  Dashboard       : http://localhost:3000  (demo / demo123)" -ForegroundColor Green
 Write-Host "  RabbitMQ Mgmt   : http://localhost:15672  (guest/guest)" -ForegroundColor Green

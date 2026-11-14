@@ -6,7 +6,13 @@ using Portfolio.TradeOrderService.Database;
 using Portfolio.TradeOrderService.ServiceInterfaces;
 using Portfolio.TradeOrderService.Services;
 
+const string DashboardCors = "dashboard";
+
 var builder = WebApplication.CreateBuilder(args);
+
+var dashboardOrigin = builder.Configuration["Dashboard:Origin"] ?? "http://localhost:3000";
+builder.Services.AddCors(opts => opts.AddPolicy(DashboardCors, p =>
+    p.WithOrigins(dashboardOrigin).AllowAnyHeader().AllowAnyMethod()));
 
 var authority = builder.Configuration["Auth:Authority"]
     ?? throw new InvalidOperationException("Auth:Authority configuration is missing.");
@@ -55,6 +61,7 @@ var dbOptions = builder.Configuration
 builder.Services.AddSingleton(dbOptions);
 builder.Services.AddSingleton<MigrationRunner>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IMetricsRepository, MetricsRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 
 var app = builder.Build();
@@ -69,6 +76,7 @@ app.UseSwagger();
 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Trade Order Service v1"));
 
 app.UseHttpsRedirection();
+app.UseCors(DashboardCors);
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

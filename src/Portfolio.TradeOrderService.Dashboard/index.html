@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trade Order Service</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0d1117; color: #c9d1d9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; }
+  nav { background: #161b22; border-bottom: 1px solid #30363d; padding: 0 2rem; display: flex; align-items: center; gap: 2rem; height: 56px; }
+  .brand { font-weight: 700; font-size: 1rem; color: #f0f6fc; }
+  .nav-links { display: flex; gap: 1.5rem; margin-left: auto; }
+  .nav-links button { background: none; border: none; color: #8b949e; font-size: 0.875rem; cursor: pointer; padding: 0; }
+  .nav-links button.active, .nav-links button:hover { color: #f0f6fc; }
+  .btn-logout { color: #f85149 !important; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+  h2 { font-size: 1.25rem; font-weight: 600; color: #f0f6fc; margin-bottom: 1.5rem; }
+  h3 { font-size: 1rem; font-weight: 600; color: #c9d1d9; margin-bottom: 1rem; }
+
+  /* Login screen */
+  #login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+  .login-card { background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 2.5rem; text-align: center; max-width: 360px; width: 100%; }
+  .login-card h1 { font-size: 1.375rem; font-weight: 700; color: #f0f6fc; margin-bottom: 0.5rem; }
+  .login-card p { color: #8b949e; font-size: 0.875rem; margin-bottom: 2rem; }
+  .btn-login { background: #238636; border: 1px solid #2ea043; border-radius: 6px; color: #fff; padding: 0.65rem 2rem; font-size: 0.9rem; font-weight: 600; cursor: pointer; width: 100%; }
+  .btn-login:hover { background: #2ea043; }
+
+  /* Stat tiles */
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+  .tile { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 1.25rem; }
+  .tile-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: #8b949e; font-weight: 600; }
+  .tile-value { font-size: 2rem; font-weight: 700; color: #f0f6fc; margin-top: 0.25rem; }
+  .tile-value.green { color: #3fb950; }
+  .tile-value.orange { color: #f0883e; }
+  .tile-value.red { color: #f85149; }
+
+  /* Charts */
+  .charts { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
+  @media (max-width: 700px) { .charts { grid-template-columns: 1fr; } }
+  .chart-card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 1.25rem; }
+  .chart-card canvas { max-height: 240px; }
+
+  /* Orders table */
+  .card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; overflow: hidden; margin-bottom: 1.5rem; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+  th { background: #0d1117; padding: 0.6rem 1rem; text-align: left; color: #8b949e; border-bottom: 1px solid #30363d; font-weight: 600; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.05em; }
+  td { padding: 0.75rem 1rem; border-bottom: 1px solid #21262d; }
+  tr:last-child td { border-bottom: none; }
+  .badge { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 3px; font-size: 0.7rem; font-weight: 700; }
+  .badge-PENDING      { background: #3d2b1a; color: #f0883e; }
+  .badge-FILLED       { background: #1a3a2a; color: #3fb950; }
+  .badge-REJECTED     { background: #3d1f1f; color: #f85149; }
+  .badge-DEAD_LETTERED{ background: #21262d; color: #8b949e; }
+  .badge-BUY  { color: #3fb950; font-weight: 700; }
+  .badge-SELL { color: #f85149; font-weight: 700; }
+
+  /* Create order form */
+  .form-card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; }
+  .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+  label { font-size: 0.75rem; color: #8b949e; font-weight: 600; display: block; margin-bottom: 0.3rem; }
+  input, select { width: 100%; background: #0d1117; border: 1px solid #30363d; border-radius: 6px; padding: 0.5rem 0.75rem; color: #c9d1d9; font-size: 0.875rem; outline: none; }
+  input:focus, select:focus { border-color: #58a6ff; }
+  select option { background: #161b22; }
+  .btn-submit { background: #238636; border: 1px solid #2ea043; border-radius: 6px; color: #fff; padding: 0.55rem 1.5rem; font-size: 0.875rem; font-weight: 600; cursor: pointer; }
+  .btn-submit:hover { background: #2ea043; }
+  .alert { padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.8rem; margin-bottom: 1rem; }
+  .alert-success { background: #1a3a2a; border: 1px solid #2ea043; color: #3fb950; }
+  .alert-error   { background: #3d1f1f; border: 1px solid #8b2020; color: #f85149; }
+
+  .empty { text-align: center; padding: 2.5rem; color: #484f58; font-size: 0.875rem; }
+  .refresh-note { font-size: 0.7rem; color: #484f58; float: right; margin-top: 0.25rem; }
+</style>
+</head>
+<body>
+
+<!-- Login screen -->
+<div id="login-screen" style="display:none">
+  <div class="login-card">
+    <h1>Trade Order Service</h1>
+    <p>Sign in to view and submit orders</p>
+    <button class="btn-login" onclick="startLogin()">Sign in</button>
+  </div>
+</div>
+
+<!-- App shell -->
+<div id="app" style="display:none">
+  <nav>
+    <span class="brand">Trade Order Service</span>
+    <div class="nav-links">
+      <button id="tab-orders" class="active" onclick="showTab('orders')">Orders</button>
+      <button id="tab-metrics" onclick="showTab('metrics')">Metrics</button>
+      <button class="btn-logout" onclick="logout()">Sign out</button>
+    </div>
+  </nav>
+
+  <!-- Orders tab -->
+  <div id="pane-orders" class="container">
+    <h2>Submit Order</h2>
+    <div class="form-card">
+      <div id="order-alert"></div>
+      <div class="form-row">
+        <div>
+          <label>Account ID</label>
+          <input id="f-account" placeholder="ACC-001" value="ACC-001" />
+        </div>
+        <div>
+          <label>Symbol</label>
+          <input id="f-symbol" placeholder="AAPL" value="AAPL" />
+        </div>
+        <div>
+          <label>Side</label>
+          <select id="f-side">
+            <option value="0">BUY</option>
+            <option value="1">SELL</option>
+          </select>
+        </div>
+        <div>
+          <label>Quantity</label>
+          <input id="f-quantity" type="number" placeholder="10" value="10" min="0.00000001" step="any" />
+        </div>
+        <div>
+          <label>Price</label>
+          <input id="f-price" type="number" placeholder="195.50" value="195.50" min="0.00000001" step="any" />
+        </div>
+      </div>
+      <button class="btn-submit" onclick="submitOrder()">Submit Order</button>
+    </div>
+
+    <h2>Recent Orders <span class="refresh-note">auto-refreshes every 10s</span></h2>
+    <div class="card">
+      <table>
+        <thead>
+          <tr><th>Symbol</th><th>Side</th><th>Qty</th><th>Price</th><th>Status</th><th>Account</th><th>Created</th></tr>
+        </thead>
+        <tbody id="orders-body">
+          <tr><td colspan="7" class="empty">Loading…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Metrics tab -->
+  <div id="pane-metrics" class="container" style="display:none">
+    <h2>Live Metrics <span class="refresh-note">auto-refreshes every 10s</span></h2>
+    <div class="tiles">
+      <div class="tile"><div class="tile-label">Total Orders</div><div class="tile-value" id="m-total">—</div></div>
+      <div class="tile"><div class="tile-label">Last Hour</div><div class="tile-value green" id="m-hour">—</div></div>
+      <div class="tile"><div class="tile-label">Outbox Pending</div><div class="tile-value orange" id="m-ob-pending">—</div></div>
+      <div class="tile"><div class="tile-label">Outbox Sent</div><div class="tile-value green" id="m-ob-sent">—</div></div>
+      <div class="tile"><div class="tile-label">Outbox Failed</div><div class="tile-value red" id="m-ob-failed">—</div></div>
+    </div>
+    <div class="charts">
+      <div class="chart-card">
+        <h3>Orders by Status</h3>
+        <canvas id="chart-status"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3>Outbox Health</h3>
+        <canvas id="chart-outbox"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const CONFIG = {
+  apiUrl:      window.API_URL      || 'http://localhost:8080',
+  authUrl:     window.AUTH_URL     || 'http://localhost:5001',
+  clientId:    'dashboard',
+  redirectUri: window.location.origin + '/callback.html',
+  scope:       'openid profile orders.read'
+};
+
+// ── Auth ─────────────────────────────────────────────────────────────────────
+
+function getToken() { return sessionStorage.getItem('access_token'); }
+
+function logout() {
+  sessionStorage.clear();
+  window.location.href = CONFIG.authUrl + '/connect/endsession?post_logout_redirect_uri=' + encodeURIComponent(window.location.origin);
+}
+
+async function startLogin() {
+  const verifier   = randomString(64);
+  const challenge  = await sha256Base64Url(verifier);
+  const state      = randomString(16);
+  sessionStorage.setItem('pkce_verifier', verifier);
+  sessionStorage.setItem('pkce_state', state);
+
+  const url = CONFIG.authUrl + '/connect/authorize?' + new URLSearchParams({
+    response_type: 'code',
+    client_id:     CONFIG.clientId,
+    redirect_uri:  CONFIG.redirectUri,
+    scope:         CONFIG.scope,
+    state,
+    code_challenge:        challenge,
+    code_challenge_method: 'S256'
+  });
+  window.location.href = url;
+}
+
+function randomString(len) {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const arr = new Uint8Array(len);
+  crypto.getRandomValues(arr);
+  return Array.from(arr, b => chars[b % chars.length]).join('');
+}
+
+async function sha256Base64Url(str) {
+  const data = new TextEncoder().encode(str);
+  const hash = await crypto.subtle.digest('SHA-256', data);
+  return btoa(String.fromCharCode(...new Uint8Array(hash)))
+    .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+}
+
+// ── API helpers ──────────────────────────────────────────────────────────────
+
+async function apiFetch(path, opts = {}) {
+  const token = getToken();
+  return fetch(CONFIG.apiUrl + path, {
+    ...opts,
+    headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: 'Bearer ' + token } : {}), ...(opts.headers || {}) }
+  });
+}
+
+// ── Orders tab ───────────────────────────────────────────────────────────────
+
+async function loadOrders() {
+  try {
+    const res  = await apiFetch('/v1/orders?pageSize=20');
+    if (res.status === 401) { logout(); return; }
+    const data = await res.json();
+    const tbody = document.getElementById('orders-body');
+    if (!data.items || data.items.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" class="empty">No orders yet. Submit one above.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = data.items.map(o => `
+      <tr>
+        <td><strong>${o.symbol}</strong></td>
+        <td><span class="badge-${o.side}">${o.side}</span></td>
+        <td>${o.quantity}</td>
+        <td>$${Number(o.price).toFixed(2)}</td>
+        <td><span class="badge badge-${o.status}">${o.status}</span></td>
+        <td>${o.accountId}</td>
+        <td>${new Date(o.createdAt).toLocaleTimeString()}</td>
+      </tr>`).join('');
+  } catch { /* network down */ }
+}
+
+async function submitOrder() {
+  const alertEl = document.getElementById('order-alert');
+  alertEl.innerHTML = '';
+  const body = {
+    accountId: document.getElementById('f-account').value.trim(),
+    symbol:    document.getElementById('f-symbol').value.trim().toUpperCase(),
+    side:      parseInt(document.getElementById('f-side').value),
+    quantity:  parseFloat(document.getElementById('f-quantity').value),
+    price:     parseFloat(document.getElementById('f-price').value)
+  };
+  try {
+    const res = await apiFetch('/v1/orders', {
+      method: 'POST',
+      headers: { 'Idempotency-Key': 'dash-' + Date.now() },
+      body: JSON.stringify(body)
+    });
+    if (res.ok) {
+      alertEl.innerHTML = '<div class="alert alert-success">Order submitted successfully.</div>';
+      loadOrders();
+    } else {
+      const err = await res.json();
+      alertEl.innerHTML = `<div class="alert alert-error">Error ${res.status}: ${JSON.stringify(err.errors || err)}</div>`;
+    }
+  } catch (e) {
+    alertEl.innerHTML = `<div class="alert alert-error">Network error: ${e.message}</div>`;
+  }
+}
+
+// ── Metrics tab ──────────────────────────────────────────────────────────────
+
+let statusChart, outboxChart;
+
+function initCharts() {
+  const statusCtx = document.getElementById('chart-status').getContext('2d');
+  statusChart = new Chart(statusCtx, {
+    type: 'doughnut',
+    data: { labels: ['PENDING', 'FILLED', 'REJECTED', 'DEAD_LETTERED'], datasets: [{ data: [0,0,0,0], backgroundColor: ['#f0883e','#3fb950','#f85149','#484f58'], borderWidth: 0 }] },
+    options: { plugins: { legend: { labels: { color: '#8b949e', font: { size: 11 } } } }, cutout: '65%' }
+  });
+
+  const outboxCtx = document.getElementById('chart-outbox').getContext('2d');
+  outboxChart = new Chart(outboxCtx, {
+    type: 'bar',
+    data: { labels: ['PENDING', 'SENT', 'FAILED'], datasets: [{ data: [0,0,0], backgroundColor: ['#f0883e','#3fb950','#f85149'], borderRadius: 4 }] },
+    options: { plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#8b949e' }, grid: { color: '#21262d' } }, y: { ticks: { color: '#8b949e', precision: 0 }, grid: { color: '#21262d' } } } }
+  });
+}
+
+async function loadMetrics() {
+  try {
+    const res  = await fetch(CONFIG.apiUrl + '/v1/metrics');
+    const m    = await res.json();
+    document.getElementById('m-total').textContent      = m.totalOrders;
+    document.getElementById('m-hour').textContent       = m.ordersLastHour;
+    document.getElementById('m-ob-pending').textContent = m.outboxPending;
+    document.getElementById('m-ob-sent').textContent    = m.outboxSent;
+    document.getElementById('m-ob-failed').textContent  = m.outboxFailed;
+    statusChart.data.datasets[0].data = [m.pending, m.filled, m.rejected, m.deadLettered];
+    statusChart.update();
+    outboxChart.data.datasets[0].data = [m.outboxPending, m.outboxSent, m.outboxFailed];
+    outboxChart.update();
+  } catch { /* network down */ }
+}
+
+// ── Tab nav ──────────────────────────────────────────────────────────────────
+
+function showTab(tab) {
+  document.getElementById('pane-orders').style.display  = tab === 'orders'  ? '' : 'none';
+  document.getElementById('pane-metrics').style.display = tab === 'metrics' ? '' : 'none';
+  document.getElementById('tab-orders').classList.toggle('active',  tab === 'orders');
+  document.getElementById('tab-metrics').classList.toggle('active', tab === 'metrics');
+  if (tab === 'metrics') loadMetrics();
+}
+
+// ── Bootstrap ────────────────────────────────────────────────────────────────
+
+function boot() {
+  const token = getToken();
+  if (!token) {
+    document.getElementById('login-screen').style.display = '';
+    return;
+  }
+  document.getElementById('app').style.display = '';
+  initCharts();
+  loadOrders();
+  loadMetrics();
+  setInterval(loadOrders,  10000);
+  setInterval(loadMetrics, 10000);
+}
+
+boot();
+</script>
+</body>
+</html>

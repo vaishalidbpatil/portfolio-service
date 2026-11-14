@@ -55,7 +55,7 @@ public static class Config
             RequireClientSecret = false,
             RequirePkce = true,
             AllowedCorsOrigins = { "http://localhost:3000" },
-            RedirectUris = { "http://localhost:3000/callback" },
+            RedirectUris = { "http://localhost:3000/callback.html" },
             PostLogoutRedirectUris = { "http://localhost:3000" },
             AllowedScopes = { "openid", "profile", "orders.read" }
         }

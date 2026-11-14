@@ -255,6 +255,26 @@ Authorization: Bearer &lt;access_token&gt;</pre>
   </div>
 
   <div class="section">
+    <h2>Rate Limiting</h2>
+    <div class="callout">
+      All endpoints are protected by ASP.NET Core's built-in fixed-window rate limiter.
+      Exceeding the limit returns <code>429 Too Many Requests</code> with a <code>Retry-After</code> header
+      indicating when the window resets.
+    </div>
+    <table class="param-table" style="margin-top:1rem;">
+      <tr><th>Endpoint</th><th>Limit</th><th>Window</th></tr>
+      <tr><td>POST /v1/orders</td><td>20 requests</td><td>per minute per IP</td></tr>
+      <tr><td>GET /v1/orders, GET /v1/orders/{id}</td><td>60 requests</td><td>per minute per IP</td></tr>
+      <tr><td>GET /v1/metrics</td><td>30 requests</td><td>per minute per IP</td></tr>
+    </table>
+    <div style="margin-top:0.75rem;">
+      <h4>429 response</h4>
+      <pre><span class="hl-key">HTTP/1.1 429 Too Many Requests
+Retry-After:</span> <span class="hl-num">42</span></pre>
+    </div>
+  </div>
+
+  <div class="section">
     <h2>Idempotency</h2>
     <div class="callout">
       <strong>How it works:</strong> Every <code>POST /v1/orders</code> call must include an <code>Idempotency-Key</code> header. If a request arrives with a key that already exists in the database, the original order is returned immediately — no duplicate insert, no error. This makes retries safe: a network failure won't create phantom duplicate orders.

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Portfolio.TradeOrderService.DataAccess;
 
 namespace Portfolio.TradeOrderService.Api.Controllers;
@@ -17,6 +18,7 @@ public class MetricsController : ControllerBase
     }
 
     [HttpGet]
+    [EnableRateLimiting("metrics-read")]
     public async Task<IActionResult> GetMetrics()
     {
         var result = await _metrics.GetMetricsAsync();

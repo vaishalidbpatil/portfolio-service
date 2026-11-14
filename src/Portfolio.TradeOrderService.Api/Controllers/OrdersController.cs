@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Portfolio.TradeOrderService.Models;
 using Portfolio.TradeOrderService.Models.Requests;
 using Portfolio.TradeOrderService.ServiceInterfaces;
@@ -19,6 +20,7 @@ public class OrdersController : ControllerBase
     }
 
     [HttpPost]
+    [EnableRateLimiting("orders-write")]
     public async Task<IActionResult> CreateOrder(
         [FromBody] CreateOrderRequest request,
         [FromHeader(Name = "Idempotency-Key")] string? idempotencyKey)
@@ -31,6 +33,7 @@ public class OrdersController : ControllerBase
     }
 
     [HttpGet("{id:guid}")]
+    [EnableRateLimiting("orders-read")]
     public async Task<IActionResult> GetOrder(Guid id)
     {
         var order = await _orderService.GetOrderAsync(id);
@@ -38,6 +41,7 @@ public class OrdersController : ControllerBase
     }
 
     [HttpGet]
+    [EnableRateLimiting("orders-read")]
     public async Task<IActionResult> ListOrders(
         [FromQuery] string? accountId,
         [FromQuery] string? symbol,

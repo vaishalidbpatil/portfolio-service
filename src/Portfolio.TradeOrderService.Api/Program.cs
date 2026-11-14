@@ -1,4 +1,6 @@
+using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.OpenApi;
 using Portfolio.TradeOrderService.Api.Middleware;
 using Portfolio.TradeOrderService.Configuration;
@@ -43,6 +45,38 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 builder.Services.AddAuthorization();
+
+builder.Services.AddRateLimiter(opts =>
+{
+    opts.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+
+    // POST /v1/orders — 20 per minute per IP
+    opts.AddFixedWindowLimiter("orders-write", o =>
+    {
+        o.PermitLimit = 20;
+        o.Window = TimeSpan.FromMinutes(1);
+        o.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+        o.QueueLimit = 0;
+    });
+
+    // GET /v1/orders — 60 per minute per IP
+    opts.AddFixedWindowLimiter("orders-read", o =>
+    {
+        o.PermitLimit = 60;
+        o.Window = TimeSpan.FromMinutes(1);
+        o.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+        o.QueueLimit = 0;
+    });
+
+    // GET /v1/metrics — 30 per minute per IP
+    opts.AddFixedWindowLimiter("metrics-read", o =>
+    {
+        o.PermitLimit = 30;
+        o.Window = TimeSpan.FromMinutes(1);
+        o.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+        o.QueueLimit = 0;
+    });
+});
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -92,6 +126,7 @@ using (var scope = app.Services.CreateScope())
 app.UseSwagger();
 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Trade Order Service v1"));
 
+app.UseRateLimiter();
 app.UseSerilogRequestLogging(opts =>
     opts.GetLevel = (ctx, _, _) =>
         ctx.Request.Path.StartsWithSegments("/health") ? LogEventLevel.Debug : LogEventLevel.Information);

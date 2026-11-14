@@ -1,0 +1,57 @@
+docker-compose.yml
+  s_f6ca9e209b566f::t_fb4a4a936a4965 56
+  s_f6ca9e209b566f::t_f23686b78f5fd4 61-72
+src/Portfolio.TradeOrderService.Api/Controllers/MetricsController.cs
+  s_f6ca9e209b566f::t_0e17df1dde825e 1-25
+src/Portfolio.TradeOrderService.Dashboard/index.html
+  s_f6ca9e209b566f::t_07fef474fef0e7 1-345
+src/Portfolio.TradeOrderService.Auth/Program.cs
+  s_f6ca9e209b566f::t_80540b2479aff6 3-4,16,21-22,24-25
+src/Portfolio.TradeOrderService.Auth/Pages/Account/Login.cshtml.cs
+  s_f6ca9e209b566f::t_cf7aca54bee674 3-28,30,32-39,49-54,56-62
+  s_f6ca9e209b566f::t_855ba70ec1943f 47,55
+  s_f6ca9e209b566f::t_489cc209b30c83 1-2,29,31,40-46,48
+src/Portfolio.TradeOrderService.Dashboard/callback.html
+  s_f6ca9e209b566f::t_ef8182021333aa 1-60
+src/Portfolio.TradeOrderService.Models/Responses/MetricsResponse.cs
+  s_f6ca9e209b566f::t_8b6d47e15b7731 1-13
+src/Portfolio.TradeOrderService.Auth/TestUsers.cs
+  s_f6ca9e209b566f::t_a70341c5ed44b8 17-18
+  s_f6ca9e209b566f::t_fe814fd1a05f52 1-16,19-22
+src/Portfolio.TradeOrderService.DataAccess/IMetricsRepository.cs
+  s_f6ca9e209b566f::t_f52bb355e47163 1-8
+src/Portfolio.TradeOrderService.Auth/Config.cs
+  s_f6ca9e209b566f::t_078d45f06ffbb0 58
+src/Portfolio.TradeOrderService.Dashboard/nginx.conf
+  s_f6ca9e209b566f::t_c08ca042ea6052 1-15
+src/Portfolio.TradeOrderService.Auth/Pages/Account/Login.cshtml
+  s_f6ca9e209b566f::t_260c0ba43a78ce 1-47
+src/Portfolio.TradeOrderService.Dashboard/Dockerfile
+  s_f6ca9e209b566f::t_c86bfbb4a29360 1-5
+src/Portfolio.TradeOrderService.Api/Program.cs
+  s_f6ca9e209b566f::t_0ea3081f7947c8 9-10
+  s_f6ca9e209b566f::t_ccd1d31984c724 79
+  s_f6ca9e209b566f::t_c2306774e987af 64
+  s_f6ca9e209b566f::t_c8bea02968c048 13-16
+src/Portfolio.TradeOrderService.DataAccess/MetricsRepository.cs
+  s_f6ca9e209b566f::t_8626d4222c3b69 1-59
+setup.ps1
+  s_f6ca9e209b566f::t_6d6a9fba7cb334 63-64,67
+  s_f6ca9e209b566f::t_5098e08eb93d29 80
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d285d8f6595120ee5be34bfce2e9c8afc47cb92d",
+  "prompts": {},
+  "sessions": {
+    "s_f6ca9e209b566f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b8474267-82d1-431c-a7de-8b207ebf9fbe",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "vaishali.patil <vaishali.patil@coupa.com>"
+    }
+  }
+}

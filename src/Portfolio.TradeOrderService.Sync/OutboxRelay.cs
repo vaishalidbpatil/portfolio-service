@@ -5,6 +5,7 @@ using Polly.CircuitBreaker;
 using Polly.Retry;
 using Portfolio.TradeOrderService.Configuration;
 using RabbitMQ.Client;
+using Serilog.Context;
 
 namespace Portfolio.TradeOrderService.Sync;
 
@@ -110,22 +111,25 @@ public class OutboxRelay : BackgroundService
 
         foreach (var entry in entries)
         {
-            try
+            using (LogContext.PushProperty("CorrelationId", entry.CorrelationId ?? "none"))
             {
-                await _publishPipeline.ExecuteAsync(async token =>
+                try
                 {
-                    var body = Encoding.UTF8.GetBytes(entry.Payload);
-                    var props = new BasicProperties { Persistent = true };
-                    await channel.BasicPublishAsync(_mqOptions.Exchange, "order.created", true, props, body, token);
-                }, ct);
+                    await _publishPipeline.ExecuteAsync(async token =>
+                    {
+                        var body = Encoding.UTF8.GetBytes(entry.Payload);
+                        var props = new BasicProperties { Persistent = true };
+                        await channel.BasicPublishAsync(_mqOptions.Exchange, "order.created", true, props, body, token);
+                    }, ct);
 
-                await MarkSentAsync(entry.Id, ct);
-                _logger.LogInformation("Published {EventType} for order {OrderId}", entry.EventType, entry.OrderId);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed to publish outbox entry {Id} after retries", entry.Id);
-                await MarkFailedAsync(entry.Id, ct);
+                    await MarkSentAsync(entry.Id, ct);
+                    _logger.LogInformation("Published {EventType} for order {OrderId}", entry.EventType, entry.OrderId);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Failed to publish outbox entry {Id} after retries", entry.Id);
+                    await MarkFailedAsync(entry.Id, ct);
+                }
             }
         }
     }
@@ -137,7 +141,7 @@ public class OutboxRelay : BackgroundService
 
         // FOR UPDATE SKIP LOCKED allows multiple relay instances to run safely without duplicates
         await using var cmd = new NpgsqlCommand("""
-            SELECT id, order_id, event_type, payload, attempts
+            SELECT id, order_id, event_type, payload, attempts, correlation_id
             FROM outbox
             WHERE status = 'PENDING' AND attempts < 5
             ORDER BY created_at ASC
@@ -154,7 +158,8 @@ public class OutboxRelay : BackgroundService
                 reader.GetGuid(1),
                 reader.GetString(2),
                 reader.GetString(3),
-                reader.GetInt32(4)
+                reader.GetInt32(4),
+                reader.IsDBNull(5) ? null : reader.GetString(5)
             ));
         }
         return entries;
@@ -181,5 +186,5 @@ public class OutboxRelay : BackgroundService
         await cmd.ExecuteNonQueryAsync(ct);
     }
 
-    private record OutboxEntry(Guid Id, Guid OrderId, string EventType, string Payload, int Attempts);
+    private record OutboxEntry(Guid Id, Guid OrderId, string EventType, string Payload, int Attempts, string? CorrelationId);
 }

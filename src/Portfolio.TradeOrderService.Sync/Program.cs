@@ -1,7 +1,17 @@
 using Portfolio.TradeOrderService.Configuration;
 using Portfolio.TradeOrderService.Sync;
+using Serilog;
+using Serilog.Formatting.Compact;
+
+Log.Logger = new LoggerConfiguration()
+    .Enrich.FromLogContext()
+    .WriteTo.Console(new CompactJsonFormatter())
+    .CreateBootstrapLogger();
 
 var host = Host.CreateDefaultBuilder(args)
+    .UseSerilog((ctx, cfg) => cfg
+        .Enrich.FromLogContext()
+        .WriteTo.Console(new CompactJsonFormatter()))
     .ConfigureServices((ctx, services) =>
     {
         var dbOptions = ctx.Configuration

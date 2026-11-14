@@ -1,14 +1,30 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi;
+using Portfolio.TradeOrderService.Api.Middleware;
 using Portfolio.TradeOrderService.Configuration;
 using Portfolio.TradeOrderService.DataAccess;
 using Portfolio.TradeOrderService.Database;
 using Portfolio.TradeOrderService.ServiceInterfaces;
 using Portfolio.TradeOrderService.Services;
+using Serilog;
+using Serilog.Events;
+using Serilog.Formatting.Compact;
+
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
+    .Enrich.FromLogContext()
+    .WriteTo.Console(new CompactJsonFormatter())
+    .CreateBootstrapLogger();
 
 const string DashboardCors = "dashboard";
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Host.UseSerilog((ctx, cfg) => cfg
+    .MinimumLevel.Information()
+    .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
+    .Enrich.FromLogContext()
+    .WriteTo.Console(new CompactJsonFormatter()));
 
 var dashboardOrigin = builder.Configuration["Dashboard:Origin"] ?? "http://localhost:3000";
 builder.Services.AddCors(opts => opts.AddPolicy(DashboardCors, p =>
@@ -60,6 +76,7 @@ var dbOptions = builder.Configuration
 
 builder.Services.AddSingleton(dbOptions);
 builder.Services.AddSingleton<MigrationRunner>();
+builder.Services.AddScoped<CorrelationContext>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IMetricsRepository, MetricsRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
@@ -75,6 +92,10 @@ using (var scope = app.Services.CreateScope())
 app.UseSwagger();
 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Trade Order Service v1"));
 
+app.UseSerilogRequestLogging(opts =>
+    opts.GetLevel = (ctx, _, _) =>
+        ctx.Request.Path.StartsWithSegments("/health") ? LogEventLevel.Debug : LogEventLevel.Information);
+app.UseMiddleware<CorrelationIdMiddleware>();
 app.UseHttpsRedirection();
 app.UseCors(DashboardCors);
 app.UseAuthentication();

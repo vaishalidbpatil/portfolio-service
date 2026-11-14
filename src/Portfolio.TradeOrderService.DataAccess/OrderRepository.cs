@@ -8,10 +8,12 @@ namespace Portfolio.TradeOrderService.DataAccess;
 public class OrderRepository : IOrderRepository
 {
     private readonly DatabaseOptions _options;
+    private readonly CorrelationContext _correlation;
 
-    public OrderRepository(DatabaseOptions options)
+    public OrderRepository(DatabaseOptions options, CorrelationContext correlation)
     {
         _options = options;
+        _correlation = correlation;
     }
 
     public async Task<Order?> GetByIdAsync(Guid id)
@@ -125,13 +127,14 @@ public class OrderRepository : IOrderRepository
         });
 
         await using var outboxCmd = new NpgsqlCommand("""
-            INSERT INTO outbox (order_id, event_type, payload)
-            VALUES (@orderId, @eventType, @payload::jsonb)
+            INSERT INTO outbox (order_id, event_type, payload, correlation_id)
+            VALUES (@orderId, @eventType, @payload::jsonb, @correlationId)
             """, conn, tx);
 
         outboxCmd.Parameters.AddWithValue("orderId", created.Id);
         outboxCmd.Parameters.AddWithValue("eventType", "ORDER_CREATED");
         outboxCmd.Parameters.AddWithValue("payload", payload);
+        outboxCmd.Parameters.AddWithValue("correlationId", _correlation.CorrelationId);
 
         await outboxCmd.ExecuteNonQueryAsync();
         await tx.CommitAsync();

@@ -1,0 +1,47 @@
+src/Portfolio.TradeOrderService.Sync/OutboxRelay.cs
+  s_f6ca9e209b566f::t_674eec01be55c8 189
+  s_f6ca9e209b566f::t_7645bf3c9ef831 8
+  s_f6ca9e209b566f::t_a463cf1a6cc072 161-162
+  s_f6ca9e209b566f::t_c917c4f48b8904 144
+  s_f6ca9e209b566f::t_e4a5ea6f662aa3 114,116,118-132
+src/Portfolio.TradeOrderService.Auth/Portfolio.TradeOrderService.Auth.csproj
+  s_f6ca9e209b566f::t_abe8aa2ccc5d83 11-12
+src/Portfolio.TradeOrderService.Auth/Program.cs
+  s_f6ca9e209b566f::t_23ded0f485bb65 1-4,6-10
+src/Portfolio.TradeOrderService.DataAccess/OrderRepository.cs
+  s_f6ca9e209b566f::t_71eefca2dd1b26 11,13,16
+  s_f6ca9e209b566f::t_46d023439b75eb 130-131,137
+src/Portfolio.TradeOrderService.Api/Middleware/CorrelationIdMiddleware.cs
+  s_f6ca9e209b566f::t_53456311ec43f7 1-26
+src/Portfolio.TradeOrderService.Api/Program.cs
+  s_f6ca9e209b566f::t_2c825452303c86 23-27
+  s_f6ca9e209b566f::t_a25671a0b15fc8 3,9-18
+  s_f6ca9e209b566f::t_93eeac887ac63c 79
+  s_f6ca9e209b566f::t_3f3d56a7f49344 95-98
+src/Portfolio.TradeOrderService.Sync/Program.cs
+  s_f6ca9e209b566f::t_f0936b75d7d971 3-9,12-14
+src/Portfolio.TradeOrderService.Database/Migrations/005_add_correlation_id_to_outbox.sql
+  s_f6ca9e209b566f::t_aa36f60992c806 1
+src/Portfolio.TradeOrderService.Api/Portfolio.TradeOrderService.Api.csproj
+  s_f6ca9e209b566f::t_34c217da79bc8e 14-15
+src/Portfolio.TradeOrderService.Sync/Portfolio.TradeOrderService.Sync.csproj
+  s_f6ca9e209b566f::t_3367801c1b5a7e 14-16
+src/Portfolio.TradeOrderService.Configuration/CorrelationContext.cs
+  s_f6ca9e209b566f::t_cea63ec835788c 1-6
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c5ac2b7de4f6306d46900ea02648b579487a0383",
+  "prompts": {},
+  "sessions": {
+    "s_f6ca9e209b566f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b8474267-82d1-431c-a7de-8b207ebf9fbe",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "vaishali.patil <vaishali.patil@coupa.com>"
+    }
+  }
+}

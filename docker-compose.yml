@@ -37,6 +37,7 @@ services:
     build:
       context: .
       dockerfile: src/Portfolio.Service.Auth/Dockerfile
+    image: portfolio-auth
     container_name: portfolio-auth
     restart: unless-stopped
     ports:
@@ -46,6 +47,7 @@ services:
     build:
       context: .
       dockerfile: src/Portfolio.Service.Api/Dockerfile
+    image: portfolio-api
     container_name: portfolio-api
     restart: unless-stopped
     ports:
@@ -62,6 +64,7 @@ services:
     build:
       context: .
       dockerfile: src/Portfolio.Service.Sync/Dockerfile
+    image: portfolio-sync
     container_name: portfolio-sync
     restart: unless-stopped
     environment:

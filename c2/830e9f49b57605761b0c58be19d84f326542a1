@@ -1,0 +1,19 @@
+src/Portfolio.Service.Auth/Config.cs
+  s_ef41988593a541::t_3d3e1e1ef3a8b7 49-58
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c2830e9f49b57605761b0c58be19d84f326542a1",
+  "prompts": {},
+  "sessions": {
+    "s_ef41988593a541": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "89f3d0c3-13aa-4bc6-a813-18398bba3153",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "vaishali.patil <vaishali.patil@coupa.com>"
+    }
+  }
+}

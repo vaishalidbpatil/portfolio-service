@@ -8,6 +8,7 @@ using Portfolio.Service.DataAccess;
 using Portfolio.Service.Database;
 using Portfolio.Service.ServiceInterfaces;
 using Portfolio.Service.Services;
+using Portfolio.Service.Services.Ingestion;
 using Serilog;
 using Serilog.Events;
 using Serilog.Formatting.Compact;
@@ -113,7 +114,12 @@ builder.Services.AddSingleton<MigrationRunner>();
 builder.Services.AddScoped<CorrelationContext>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IMetricsRepository, MetricsRepository>();
+builder.Services.AddScoped<IIngestionRepository, IngestionRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IIngestionService, IngestionService>();
+builder.Services.AddScoped<IDataQualityChecker, NoOpDataQualityChecker>();
+builder.Services.AddScoped<ISourceAdapter, CsvAdapter>();
+builder.Services.AddScoped<ISourceAdapter, JsonAdapter>();
 
 var app = builder.Build();
 

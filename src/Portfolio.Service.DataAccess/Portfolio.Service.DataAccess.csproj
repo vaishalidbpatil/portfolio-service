@@ -3,6 +3,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Portfolio.Service.Models\Portfolio.Service.Models.csproj" />
     <ProjectReference Include="..\Portfolio.Service.Database\Portfolio.Service.Database.csproj" />
+    <ProjectReference Include="..\Portfolio.Service.ServiceInterfaces\Portfolio.Service.ServiceInterfaces.csproj" />
   </ItemGroup>
 
   <ItemGroup>

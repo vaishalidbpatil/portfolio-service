@@ -1,0 +1,46 @@
+src/Portfolio.Service.ServiceInterfaces/ISourceAdapter.cs
+  s_ef41988593a541::t_662558e9417975 1-9
+src/Portfolio.Service.Services/Ingestion/NoOpDataQualityChecker.cs
+  s_ef41988593a541::t_805945202ffae7 1-13
+src/Portfolio.Service.Services/Ingestion/CsvAdapter.cs
+  s_ef41988593a541::t_fc0c8da14a1440 1-79
+src/Portfolio.Service.ServiceInterfaces/IIngestionService.cs
+  s_ef41988593a541::t_b75ebff123691f 1-10
+src/Portfolio.Service.ServiceInterfaces/IDataQualityChecker.cs
+  s_ef41988593a541::t_d38968d983d42d 1-12
+src/Portfolio.Service.DataAccess/IngestionRepository.cs
+  s_ef41988593a541::t_022b743eb1837c 1-99
+src/Portfolio.Service.Api/Controllers/IngestionController.cs
+  s_ef41988593a541::t_f4782848270c41 1-53
+src/Portfolio.Service.ServiceInterfaces/IIngestionRepository.cs
+  s_ef41988593a541::t_ab09dad963fc31 1-11
+src/Portfolio.Service.Models/IngestionJob.cs
+  s_ef41988593a541::t_a74eac74d9db8a 1-16
+src/Portfolio.Service.Models/IngestionRecord.cs
+  s_ef41988593a541::t_5b0029d6d57ad0 1-9
+src/Portfolio.Service.Services/Ingestion/JsonAdapter.cs
+  s_ef41988593a541::t_5a229ae01e5bd9 1-39
+src/Portfolio.Service.Services/Ingestion/IngestionService.cs
+  s_ef41988593a541::t_0f8ce8d4078763 1-110
+src/Portfolio.Service.Api/Program.cs
+  s_ef41988593a541::t_2bdc8efdcbd5b5 11
+  s_ef41988593a541::t_245c53b1d89d40 117,119-122
+src/Portfolio.Service.DataAccess/Portfolio.Service.DataAccess.csproj
+  s_ef41988593a541::t_ed8fa9e665d7d0 6
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ca5f4fc724b1b0c11145ff457e21c625c3e358db",
+  "prompts": {},
+  "sessions": {
+    "s_ef41988593a541": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "89f3d0c3-13aa-4bc6-a813-18398bba3153",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "vaishali.patil <vaishali.patil@coupa.com>"
+    }
+  }
+}

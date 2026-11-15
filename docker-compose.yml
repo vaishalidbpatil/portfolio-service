@@ -36,7 +36,7 @@ services:
   auth:
     build:
       context: .
-      dockerfile: src/Portfolio.TradeOrderService.Auth/Dockerfile
+      dockerfile: src/Portfolio.Service.Auth/Dockerfile
     container_name: portfolio-auth
     restart: unless-stopped
     ports:
@@ -45,7 +45,7 @@ services:
   api:
     build:
       context: .
-      dockerfile: src/Portfolio.TradeOrderService.Api/Dockerfile
+      dockerfile: src/Portfolio.Service.Api/Dockerfile
     container_name: portfolio-api
     restart: unless-stopped
     ports:
@@ -60,7 +60,7 @@ services:
 
   dashboard:
     build:
-      context: src/Portfolio.TradeOrderService.Dashboard
+      context: src/Portfolio.Service.Dashboard
       dockerfile: Dockerfile
     container_name: portfolio-dashboard
     restart: unless-stopped
@@ -73,7 +73,7 @@ services:
   sync:
     build:
       context: .
-      dockerfile: src/Portfolio.TradeOrderService.Sync/Dockerfile
+      dockerfile: src/Portfolio.Service.Sync/Dockerfile
     container_name: portfolio-sync
     restart: unless-stopped
     environment:

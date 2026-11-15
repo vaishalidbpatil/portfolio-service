@@ -1,0 +1,39 @@
+using Serilog;
+using Serilog.Events;
+using Serilog.Formatting.Compact;
+
+var builder = WebApplication.CreateBuilder(args);
+builder.Host.UseSerilog((ctx, cfg) => cfg
+    .MinimumLevel.Information()
+    .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
+    .Enrich.FromLogContext()
+    .WriteTo.Console(new CompactJsonFormatter()));
+
+builder.Services.AddRazorPages();
+
+builder.Services
+    .AddIdentityServer(options =>
+    {
+        options.Events.RaiseErrorEvents = true;
+        options.Events.RaiseSuccessEvents = true;
+        options.Events.RaiseInformationEvents = true;
+    })
+    .AddInMemoryIdentityResources(Portfolio.Service.Auth.Config.IdentityResources)
+    .AddInMemoryApiScopes(Portfolio.Service.Auth.Config.ApiScopes)
+    .AddInMemoryApiResources(Portfolio.Service.Auth.Config.ApiResources)
+    .AddInMemoryClients(Portfolio.Service.Auth.Config.Clients)
+    .AddTestUsers(Portfolio.Service.Auth.TestUsers.Users)
+    .AddDeveloperSigningCredential();  // dev only — swap for X.509 cert in production
+
+var app = builder.Build();
+
+app.UseStaticFiles();
+app.UseRouting();
+app.UseIdentityServer();
+app.UseAuthorization();
+app.MapRazorPages();
+
+// Discovery doc and JWKS are served automatically at /.well-known/openid-configuration
+app.MapGet("/health/live", () => Results.Ok(new { status = "alive" }));
+
+app.Run();

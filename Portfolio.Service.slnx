@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Portfolio.Service.Api/Portfolio.Service.Api.csproj" />
+    <Project Path="src/Portfolio.Service.Auth/Portfolio.Service.Auth.csproj" />
+    <Project Path="src/Portfolio.Service.Configuration/Portfolio.Service.Configuration.csproj" />
+    <Project Path="src/Portfolio.Service.DataAccess/Portfolio.Service.DataAccess.csproj" />
+    <Project Path="src/Portfolio.Service.Database/Portfolio.Service.Database.csproj" />
+    <Project Path="src/Portfolio.Service.Models/Portfolio.Service.Models.csproj" />
+    <Project Path="src/Portfolio.Service.ServiceInterfaces/Portfolio.Service.ServiceInterfaces.csproj" />
+    <Project Path="src/Portfolio.Service.Services/Portfolio.Service.Services.csproj" />
+    <Project Path="src/Portfolio.Service.Sync/Portfolio.Service.Sync.csproj" />
+  </Folder>
+</Solution>

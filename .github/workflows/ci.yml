@@ -19,13 +19,13 @@ jobs:
           dotnet-version: '10.0.x'
 
       - name: Restore
-        run: dotnet restore TradeOrderService.slnx
+        run: dotnet restore Portfolio.Service.slnx
 
       - name: Build
-        run: dotnet build TradeOrderService.slnx --no-restore --configuration Release
+        run: dotnet build Portfolio.Service.slnx --no-restore --configuration Release
 
       - name: Test
-        run: dotnet test TradeOrderService.slnx --no-build --configuration Release
+        run: dotnet test Portfolio.Service.slnx --no-build --configuration Release
 
   docker-build:
     name: Docker build

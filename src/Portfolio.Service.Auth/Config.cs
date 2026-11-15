@@ -46,6 +46,16 @@ public static class Config
             AllowedScopes = { "orders.read" }
         },
 
+        // Machine-to-machine: MCP Server (read-only tools)
+        new Client
+        {
+            ClientId = "mcp-server",
+            ClientName = "MCP Tool Server (M2M)",
+            AllowedGrantTypes = GrantTypes.ClientCredentials,
+            ClientSecrets = { new Secret("mcp-server-secret".Sha256()) },
+            AllowedScopes = { "orders.read" }
+        },
+
         // Browser: Dashboard (PKCE — no client secret)
         new Client
         {

@@ -1,0 +1,21 @@
+docker-compose.yml
+  s_ef41988593a541::t_c08102240aaa41 50
+  s_ef41988593a541::t_7f978c817a7fff 67
+  s_ef41988593a541::t_68cab9e28011ad 40
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "79c3e86949a9928ac7f36e31c7724d0d389d6e5c",
+  "prompts": {},
+  "sessions": {
+    "s_ef41988593a541": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "89f3d0c3-13aa-4bc6-a813-18398bba3153",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "vaishali.patil <vaishali.patil@coupa.com>"
+    }
+  }
+}

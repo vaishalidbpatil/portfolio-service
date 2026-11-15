@@ -1,0 +1,104 @@
+src/Portfolio.Service.Api/Controllers/MetricsController.cs
+  s_f6ca9e209b566f::t_e2185ee13e8a3c 1-27
+src/Portfolio.Service.Api/Controllers/OrdersController.cs
+  s_f6ca9e209b566f::t_e2185ee13e8a3c 1-58
+src/Portfolio.Service.Api/Program.cs
+  s_f6ca9e209b566f::t_e2185ee13e8a3c 1-143
+src/Portfolio.Service.DataAccess/Portfolio.Service.DataAccess.csproj
+  s_f6ca9e209b566f::t_e2185ee13e8a3c 1-18
+src/Portfolio.Service.Sync/Program.cs
+  s_f6ca9e209b566f::t_e2185ee13e8a3c 1-33
+src/Portfolio.Service.Auth/TestUsers.cs
+  s_f6ca9e209b566f::t_e2185ee13e8a3c 1-22
+src/Portfolio.Service.Auth/Pages/Account/Login.cshtml.cs
+  s_f6ca9e209b566f::t_e2185ee13e8a3c 1-62
+src/Portfolio.Service.Database/MigrationRunner.cs
+  s_f6ca9e209b566f::t_e2185ee13e8a3c 1-87
+src/Portfolio.Service.Models/Responses/MetricsResponse.cs
+  s_f6ca9e209b566f::t_e2185ee13e8a3c 1-13
+src/Portfolio.Service.Services/OrderService.cs
+  s_f6ca9e209b566f::t_e2185ee13e8a3c 1-75
+src/Portfolio.Service.Configuration/RabbitMqOptions.cs
+  s_f6ca9e209b566f::t_e2185ee13e8a3c 1-12
+src/Portfolio.Service.Api/Portfolio.Service.Api.http
+  s_f6ca9e209b566f::t_2e4745ed196b04 1-6
+src/Portfolio.Service.Models/Responses/OrderResponse.cs
+  s_f6ca9e209b566f::t_e2185ee13e8a3c 1-15
+src/Portfolio.Service.Configuration/DatabaseOptions.cs
+  s_f6ca9e209b566f::t_e2185ee13e8a3c 1-7
+src/Portfolio.Service.ServiceInterfaces/IOrderService.cs
+  s_f6ca9e209b566f::t_e2185ee13e8a3c 1-12
+Portfolio.Service.slnx
+  s_f6ca9e209b566f::t_2e4745ed196b04 3,5-11
+  s_f6ca9e209b566f::t_a2558fe46806c9 4
+src/Portfolio.Service.Models/Order.cs
+  s_f6ca9e209b566f::t_e2185ee13e8a3c 1-15
+src/Portfolio.Service.DataAccess/MetricsRepository.cs
+  s_f6ca9e209b566f::t_e2185ee13e8a3c 1-59
+src/Portfolio.Service.Auth/Config.cs
+  s_f6ca9e209b566f::t_e2185ee13e8a3c 1-63
+src/Portfolio.Service.Models/OrderSide.cs
+  s_f6ca9e209b566f::t_e2185ee13e8a3c 1-7
+docs/database.html
+  s_f6ca9e209b566f::t_e2185ee13e8a3c 98
+docs/local-dev.html
+  s_f6ca9e209b566f::t_e2185ee13e8a3c 152
+src/Portfolio.Service.Models/OrderStatus.cs
+  s_f6ca9e209b566f::t_e2185ee13e8a3c 1-9
+docker-compose.yml
+  s_f6ca9e209b566f::t_e2185ee13e8a3c 39,48,63,76
+src/Portfolio.Service.ServiceInterfaces/Portfolio.Service.ServiceInterfaces.csproj
+  s_f6ca9e209b566f::t_e2185ee13e8a3c 1-13
+src/Portfolio.Service.Sync/OutboxRelay.cs
+  s_f6ca9e209b566f::t_e2185ee13e8a3c 1-190
+src/Portfolio.Service.Api/Portfolio.Service.Api.csproj
+  s_f6ca9e209b566f::t_e2185ee13e8a3c 1-25
+src/Portfolio.Service.Sync/Portfolio.Service.Sync.csproj
+  s_f6ca9e209b566f::t_e2185ee13e8a3c 1-24
+src/Portfolio.Service.Models/Requests/CreateOrderRequest.cs
+  s_f6ca9e209b566f::t_e2185ee13e8a3c 1-21
+src/Portfolio.Service.DataAccess/OrderRepository.cs
+  s_f6ca9e209b566f::t_e2185ee13e8a3c 1-158
+src/Portfolio.Service.Api/Dockerfile
+  s_f6ca9e209b566f::t_e2185ee13e8a3c 1-36
+src/Portfolio.Service.Auth/Program.cs
+  s_f6ca9e209b566f::t_e2185ee13e8a3c 1-39
+src/Portfolio.Service.Models/Responses/PagedResponse.cs
+  s_f6ca9e209b566f::t_e2185ee13e8a3c 1-10
+src/Portfolio.Service.Auth/Dockerfile
+  s_f6ca9e209b566f::t_e2185ee13e8a3c 1-26
+.github/workflows/ci.yml
+  s_f6ca9e209b566f::t_58fb55adc51fc7 22,25,28
+src/Portfolio.Service.Api/Middleware/CorrelationIdMiddleware.cs
+  s_f6ca9e209b566f::t_e2185ee13e8a3c 1-26
+src/Portfolio.Service.Auth/Pages/Account/Login.cshtml
+  s_f6ca9e209b566f::t_e2185ee13e8a3c 1-47
+src/Portfolio.Service.Services/Portfolio.Service.Services.csproj
+  s_f6ca9e209b566f::t_e2185ee13e8a3c 1-15
+src/Portfolio.Service.Sync/Dockerfile
+  s_f6ca9e209b566f::t_e2185ee13e8a3c 1-25
+src/Portfolio.Service.DataAccess/IMetricsRepository.cs
+  s_f6ca9e209b566f::t_e2185ee13e8a3c 1-8
+src/Portfolio.Service.Configuration/CorrelationContext.cs
+  s_f6ca9e209b566f::t_e2185ee13e8a3c 1-6
+src/Portfolio.Service.DataAccess/IOrderRepository.cs
+  s_f6ca9e209b566f::t_e2185ee13e8a3c 1-11
+src/Portfolio.Service.Database/Portfolio.Service.Database.csproj
+  s_f6ca9e209b566f::t_e2185ee13e8a3c 1-21
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b70abf46850de288c00f41c9d59e59dd03b84669",
+  "prompts": {},
+  "sessions": {
+    "s_f6ca9e209b566f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b8474267-82d1-431c-a7de-8b207ebf9fbe",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "vaishali.patil <vaishali.patil@coupa.com>"
+    }
+  }
+}

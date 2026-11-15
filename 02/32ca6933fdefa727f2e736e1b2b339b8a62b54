@@ -1,0 +1,20 @@
+setup.ps1
+  s_ef41988593a541::t_fc76b8fb34d822 63-64,67
+  s_ef41988593a541::t_ab19f1413d4899 81
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0232ca6933fdefa727f2e736e1b2b339b8a62b54",
+  "prompts": {},
+  "sessions": {
+    "s_ef41988593a541": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "89f3d0c3-13aa-4bc6-a813-18398bba3153",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "vaishali.patil <vaishali.patil@coupa.com>"
+    }
+  }
+}

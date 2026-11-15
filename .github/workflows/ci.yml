@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-test:
+    name: Build & test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore
+        run: dotnet restore Portfolio.Service.slnx
+
+      - name: Build
+        run: dotnet build Portfolio.Service.slnx --no-restore --configuration Release
+
+      - name: Test
+        run: dotnet test Portfolio.Service.slnx --no-build --configuration Release
+
+  docker-build:
+    name: Docker build
+    runs-on: ubuntu-latest
+    needs: build-test
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build images
+        run: docker compose build
+        env:
+          DOCKER_BUILDKIT: 1
+
+      - name: Tag images with commit SHA
+        run: |
+          docker tag portfolio-api portfolio-api:${{ github.sha }}
+          docker tag portfolio-auth portfolio-auth:${{ github.sha }}
+          docker tag portfolio-sync portfolio-sync:${{ github.sha }}

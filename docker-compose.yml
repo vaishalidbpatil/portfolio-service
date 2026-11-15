@@ -17,18 +17,66 @@ services:
       timeout: 5s
       retries: 5
 
+  rabbitmq:
+    image: rabbitmq:4-management-alpine
+    container_name: portfolio-rabbitmq
+    restart: unless-stopped
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  auth:
+    build:
+      context: .
+      dockerfile: src/Portfolio.Service.Auth/Dockerfile
+    image: portfolio-auth
+    container_name: portfolio-auth
+    restart: unless-stopped
+    ports:
+      - "5001:5001"
+
   api:
     build:
       context: .
-      dockerfile: src/Portfolio.TradeOrderService.Api/Dockerfile
+      dockerfile: src/Portfolio.Service.Api/Dockerfile
+    image: portfolio-api
     container_name: portfolio-api
     restart: unless-stopped
     ports:
       - "8080:8080"
     environment:
       Database__ConnectionString: "Host=postgres;Port=5432;Database=tradeorders;Username=admin;Password=admin123"
+      Auth__Authority: "http://auth:5001"
+      Dashboard__Origin: "http://localhost:3000"
     depends_on:
       postgres:
+        condition: service_healthy
+
+  sync:
+    build:
+      context: .
+      dockerfile: src/Portfolio.Service.Sync/Dockerfile
+    image: portfolio-sync
+    container_name: portfolio-sync
+    restart: unless-stopped
+    environment:
+      Database__ConnectionString: "Host=postgres;Port=5432;Database=tradeorders;Username=admin;Password=admin123"
+      RabbitMq__Host: rabbitmq
+      RabbitMq__Port: "5672"
+      RabbitMq__Username: guest
+      RabbitMq__Password: guest
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
         condition: service_healthy
 
 volumes:

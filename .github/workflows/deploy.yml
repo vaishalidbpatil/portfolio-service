@@ -1,0 +1,54 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+# Requires the following GitHub secrets to be configured:
+#   REGISTRY_USERNAME   — container registry username (e.g. Docker Hub username)
+#   REGISTRY_PASSWORD   — container registry password / access token
+#   EC2_HOST            — public IP or hostname of the EC2 instance
+#   EC2_USER            — SSH user (e.g. ec2-user or ubuntu)
+#   EC2_SSH_KEY         — private key PEM for SSH access
+
+jobs:
+  deploy:
+    name: Build, push & deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to container registry
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      - name: Build and push images
+        run: |
+          docker compose build
+          docker tag portfolio-api ${{ secrets.REGISTRY_USERNAME }}/portfolio-api:${{ github.sha }}
+          docker tag portfolio-api ${{ secrets.REGISTRY_USERNAME }}/portfolio-api:latest
+          docker tag portfolio-auth ${{ secrets.REGISTRY_USERNAME }}/portfolio-auth:${{ github.sha }}
+          docker tag portfolio-auth ${{ secrets.REGISTRY_USERNAME }}/portfolio-auth:latest
+          docker tag portfolio-sync ${{ secrets.REGISTRY_USERNAME }}/portfolio-sync:${{ github.sha }}
+          docker tag portfolio-sync ${{ secrets.REGISTRY_USERNAME }}/portfolio-sync:latest
+          docker push ${{ secrets.REGISTRY_USERNAME }}/portfolio-api:${{ github.sha }}
+          docker push ${{ secrets.REGISTRY_USERNAME }}/portfolio-api:latest
+          docker push ${{ secrets.REGISTRY_USERNAME }}/portfolio-auth:${{ github.sha }}
+          docker push ${{ secrets.REGISTRY_USERNAME }}/portfolio-auth:latest
+          docker push ${{ secrets.REGISTRY_USERNAME }}/portfolio-sync:${{ github.sha }}
+          docker push ${{ secrets.REGISTRY_USERNAME }}/portfolio-sync:latest
+        env:
+          DOCKER_BUILDKIT: 1
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd ~/agentic-platform-integrator
+            docker compose pull
+            docker compose up -d --remove-orphans

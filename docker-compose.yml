@@ -58,18 +58,6 @@ services:
       postgres:
         condition: service_healthy
 
-  dashboard:
-    build:
-      context: src/Portfolio.Service.Dashboard
-      dockerfile: Dockerfile
-    container_name: portfolio-dashboard
-    restart: unless-stopped
-    ports:
-      - "3000:80"
-    depends_on:
-      - auth
-      - api
-
   sync:
     build:
       context: .
